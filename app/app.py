@@ -2,12 +2,10 @@
 from flask import Flask, render_template, request, Response
 import quandl
 import pandas as pd
-import matplotlib  
-matplotlib.use('TkAgg')   
-import matplotlib.pyplot as plt, mpld3
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-from io import BytesIO
+import plotly
+import plotly.graph_objs as go
+import json
+import numpy as np
 
 
 # # app Flask
@@ -27,18 +25,21 @@ def index():
 		end_date = request.form['end_date']
 		data = quandl.get("NSE/{}".format(ticker), start_date=start_date, end_date=end_date)
 		df = pd.DataFrame(data)
-		#image = df['Close'].plot(legend=True,figsize=(10,4))
-		Y = df['Close']
-		plot_1 = plt.plot(Y)
-		# Let's go ahead and plot out several moving averages
-		plot_2 = Y.rolling(window=20, center=False).mean().plot(legend=True,figsize=(10,4))
-		#text= mpld3.fig_to_html(plot_1)
-		#text2 = mpld3.fig_to_html(plot_2)
+		#new_df = df.reset_index()
+		xScale = df['Close']
+		yScale = df['Open']
 
-	
+		# Create a trace
+		trace = go.Scatter(
+	    	x = xScale,
+	    	y = yScale
+			)
 
-
-		return render_template('simple.html',  tables=[df.to_html(classes='data', header="true")])
+		data = [trace]
+		
+		graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+    	
+		return render_template('simple.html',  tables=[df.to_html(classes='data', header="true")], graphJSON=graphJSON)
 
 
 
