@@ -32,13 +32,13 @@ def index():
 		plot_1 = plt.plot(Y)
 		# Let's go ahead and plot out several moving averages
 		plot_2 = Y.rolling(window=20, center=False).mean().plot(legend=True,figsize=(10,4))
-		text= mpld3.fig_to_html(plot_1)
-		text2 = mpld3.fig_to_html(plot_2)
+		#text= mpld3.fig_to_html(plot_1)
+		#text2 = mpld3.fig_to_html(plot_2)
 
 	
 
 
-		return render_template('simple.html',  tables=[df.to_html(classes='data', header="true")], html=text, html2=text2)
+		return render_template('simple.html',  tables=[df.to_html(classes='data', header="true")])
 
 
 
