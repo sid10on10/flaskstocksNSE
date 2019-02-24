@@ -25,19 +25,18 @@ def index():
 		end_date = request.form['end_date']
 		data = quandl.get("NSE/{}".format(ticker), start_date=start_date, end_date=end_date)
 		df = pd.DataFrame(data)
-		#new_df = df.reset_index()
-		xScale = df['Close']
-		yScale = df['Open']
+		# Create the Plotly Data Structure
+		xScale = df.index,
+		yScale = df['Close']
 
-		# Create a trace
+		#create a trace
 		trace = go.Scatter(
-	    	x = xScale,
-	    	y = yScale
-			)
-
-		data = [trace]
-		
-		graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+			x = xScale,
+			y = yScale
+					)				
+		data1 = [trace]
+								
+		graphJSON = json.dumps(data1, cls=plotly.utils.PlotlyJSONEncoder)
     	
 		return render_template('simple.html',  tables=[df.to_html(classes='data', header="true")], graphJSON=graphJSON)
 
